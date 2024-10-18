@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 import warnings
 from typing import List, Union, Optional, NamedTuple
