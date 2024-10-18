@@ -297,7 +297,7 @@ def load_model(whisper_arch,
         print("No language specified, language will be first be detected for each audio file (increases inference time).")
         tokenizer = None
 
-    default_asr_options =  {
+    default_asr_options = {
         "beam_size": 5,
         "best_of": 5,
         "patience": 1,
@@ -323,8 +323,9 @@ def load_model(whisper_arch,
         "max_new_tokens": None,
         "clip_timestamps": None,
         "hallucination_silence_threshold": None,
-        "hotwords": [],  # Add this line
+        "hotwords": [],
     }
+
 
     if asr_options is not None:
         default_asr_options.update(asr_options)
