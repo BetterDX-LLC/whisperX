@@ -207,7 +207,7 @@ class FasterWhisperPipeline(Pipeline):
         if self.suppress_numerals:
             previous_suppress_tokens = self.options.suppress_tokens
             numeral_symbol_tokens = find_numeral_symbol_tokens(self.tokenizer)
-            print(f"Suppressing numeral and symbol tokens")
+            print("Suppressing numeral and symbol tokens")
             new_suppressed_tokens = numeral_symbol_tokens + self.options.suppress_tokens
             new_suppressed_tokens = list(set(new_suppressed_tokens))
             self.options = self.options._replace(suppress_tokens=new_suppressed_tokens)
@@ -317,21 +317,26 @@ def load_model(whisper_arch,
         "without_timestamps": True,
         "max_initial_timestamp": 0.0,
         "word_timestamps": False,
-        "prepend_punctuations": "\"'“¿([{-",
-        "append_punctuations": "\"'.。,，!！?？:：”)]}、",
+        "prepend_punctuations": "\"'"¿([{-",
+        "append_punctuations": "\"'.。,，!！?？:：)]}、",
         "suppress_numerals": False,
         "max_new_tokens": None,
         "clip_timestamps": None,
         "hallucination_silence_threshold": None,
+        "hotwords": [],  # Add this line
     }
 
     if asr_options is not None:
         default_asr_options.update(asr_options)
 
     suppress_numerals = default_asr_options["suppress_numerals"]
+    hotwords = default_asr_options.pop("hotwords", [])  # Extract hotwords
     del default_asr_options["suppress_numerals"]
 
-    default_asr_options = faster_whisper.transcribe.TranscriptionOptions(**default_asr_options)
+    default_asr_options = faster_whisper.transcribe.TranscriptionOptions(
+        hotwords=hotwords,
+        **default_asr_options
+    )
 
     default_vad_options = {
         "vad_onset": 0.500,
